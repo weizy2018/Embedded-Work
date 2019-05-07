@@ -1,8 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "card_ctrl.h"
+
 #include <QTime>
 #include <QTimer>
+
+pthread_t MainWindow::cardThread = 0;
+bool MainWindow::ic_card_state = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,8 +25,16 @@ MainWindow::MainWindow(QWidget *parent) :
     closeLedTime = false;
     fixed = false;
     useCamera = false;
+    direction = false;
 
     led = new LedLight();
+
+    //调用启动ic卡线程
+    startCard();
+
+    if (!ic_card_state) {
+        disableButtons();
+    }
 
     QTimer * timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -30,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    exitCard();
+    delete led;
     delete ui;
 }
 
@@ -46,6 +61,22 @@ void MainWindow::timerUpdate()
     //显示led倒计时
     if (!this->closeLedTime) {
         this->ledCurtime--;
+
+        if (this->ledCurtime == (this->ledTime - 1)) {
+            if (this->direction) {
+                //南北
+                led->vertical();
+                ui->label_2->setText(QString::fromUtf8("当前车向: 南北"));
+                enableButtons();
+            } else {
+                //东西
+                led->horizotal();
+                ui->label_2->setText(QString::fromUtf8("当前车向: 东西"));
+            }
+            this->direction = !(this->direction);
+
+        }
+
         QString ledText = QString::number(this->ledCurtime);
         if (this->ledCurtime < 10) {
             ledText = "0" + ledText;
@@ -53,17 +84,22 @@ void MainWindow::timerUpdate()
         if (this->ledCurtime == 0) {
             this->ledCurtime = this->ledTime;
         }
+        led->setLedTime(this->ledCurtime);
         ui->lcdNumber2->display(ledText);
+
     }
 
 
 }
 
+//由于改变时间后会触发if (this->ledCurtime == (this->ledTime - 1))， 不太合理，所以需要加一条语句
+//this->direction = !(this->direction);
 void MainWindow::on_radioButton_clicked()
 {
     if (this->ledTime != 31) {
         this->ledTime = 31;
         this->ledCurtime = 31;
+        this->direction = !(this->direction);
     }
 }
 
@@ -72,6 +108,7 @@ void MainWindow::on_radioButton_2_clicked()
     if (this->ledTime != 61) {
         this->ledTime = 61;
         this->ledCurtime = 61;
+        this->direction = !(this->direction);
     }
 }
 
@@ -80,6 +117,7 @@ void MainWindow::on_radioButton_3_clicked()
     if (this->ledTime != 91) {
         this->ledTime = 91;
         this->ledCurtime = 91;
+        this->direction = !(this->direction);
     }
 }
 
@@ -140,4 +178,32 @@ void MainWindow::on_cameraButton_clicked()
 
         ui->cameraButton->setText(QString::fromUtf8("打开摄像头"));
     }
+}
+
+void MainWindow::disableButtons()
+{
+    ui->radioButton->setDisabled(true);
+    ui->radioButton_2->setDisabled(true);
+    ui->radioButton_3->setDisabled(true);
+
+    ui->radioButtonEW->setDisabled(true);
+    ui->radioButtonSN->setDisabled(true);
+    ui->radioButtonCEL->setDisabled(true);
+
+    ui->closeTimeButton->setDisabled(true);
+    ui->cameraButton->setDisabled(true);
+}
+
+void MainWindow::enableButtons()
+{
+    ui->radioButton->setDisabled(false);
+    ui->radioButton_2->setDisabled(false);
+    ui->radioButton_3->setDisabled(false);
+
+    ui->radioButtonEW->setDisabled(false);
+    ui->radioButtonSN->setDisabled(false);
+    ui->radioButtonCEL->setDisabled(false);
+
+    ui->closeTimeButton->setDisabled(false);
+    ui->cameraButton->setDisabled(false);
 }

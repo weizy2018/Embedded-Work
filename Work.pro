@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    ledlight.cpp
+    ledlight.cpp \
+    tty.cpp \
+    card_ctrl.cpp
 
 HEADERS += \
         mainwindow.h \
-    ledlight.h
+    ledlight.h \
+    tty.h \
+    card_ctrl.h
 
 FORMS += \
         mainwindow.ui

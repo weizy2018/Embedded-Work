@@ -11,7 +11,7 @@ public:
 public:
     void horizotal();
     void vertical();
-    void setLedTime();
+    void setLedTime(int time);
 
 private:
     int fd;

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <pthread.h>
 
 #include "ledlight.h"
 
@@ -36,6 +37,10 @@ private slots:
 
     void on_cameraButton_clicked();
 
+public:
+    void disableButtons();
+    void enableButtons();
+
 private:
     Ui::MainWindow *ui;
 
@@ -46,6 +51,10 @@ private:
     bool fixed;
     bool direction;     //false: 东西  true: 南北
     bool useCamera;
+
+public:
+    static pthread_t cardThread;
+    static bool ic_card_state;
 
 private:
     LedLight * led;
