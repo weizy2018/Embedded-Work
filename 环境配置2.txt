@@ -1,0 +1,90 @@
+一:
+# cd /home
+# mkdir uptech
+# cd uptech
+# mkdir QT4
+# cd QT4
+# mkdir for_x11
+(/home/uptech/QT4/for_x11/)
+
+二:安装QT
+(检查是否安装 ls /usr/local/Trolletch)
+配置编译QT-X11:
+# /UP-CUP2440/SRC/gui/qt-x11-opensource-src-4.4.0.tar.gz -C /home/uptech/QT4/for_x11/
+
+# cd qt-x11-opensource-src-4.4.0
+# ./configure -prefix /usr/local/Trolletch/Qt-x11-4.4.0
+# gmake
+# gmake install
+安装完成
+编译项目:
+# /usr/local/Trolltech/QT-x11-4.4.0/bin/qmake -project
+# /usr/local/Trolltech/QT-x11-4.4.0/bin/qmake
+# make
+
+三:编译tslib1.4触摸屏库
+
+(检查是否已经安装过了: ls /home/uptech/QT4/for_arm)
+# cd /home/uptech/QT4
+# mkdir for_arm
+# tar xjvf /UP-CUP2440/SRC/gui/tslib-1.4.tar.bz2 -C /home/uptech/QT4/for_arm/
+# cd /home/uptech/QT4/for_arm/tslib-1.4
+# ./build.sh
+完成后会在 /home/uptech/QT4/for_arm/目录下生成tslib1.4-install文件夹
+
+四: 配置QT、Embedded坏境
+(检查是否已经安装过了: ls /usr/local/Trolltech/
+
+# cd /home/uptech/QT4/for_arm
+# tar xjvf /UP-CUP2440/SRC/gui/qt-embedded-linux-opensource-src-4.4.0.tar.bz2 –C /home/uptech/QT4/for_arm/
+
+# cd qt-embedded-linux-opensource-src-4.4.0
+# ./build4arm.sh
+完成后会在 /usr/local目录下生成 Trolltech/Qt-embedded-4.4.0目录
+
+五:
+# cd /UP-CUP2440
+# mkdir Trolltech
+拷贝 QT/Embedded库环境:
+
+# cp /usr/local/Trolltech/Qt-embedded-4.4.0/ /UP-CUP2440/Trolltech/ -arf
+# cp /home/uptech/QT4/for_arm/tslib1.4-install/lib/* /UP-CUP2440/Trolltech/Qt-embedded-4.4.0/lib/ -a
+# cp /home/uptech/QT4/for_arm/tslib1.4-install/bin/* /UP-CUP2440/Trolltech/Qt-embedded-4.4.0/bin/ -a
+# cp /home/uptech/QT4/for_arm/tslib1.4-install/etc/ /UP-CUP2440/Trolltech/Qt-embedded-4.4.0/etc/ -a
+
+六:
+加载触摸屏的驱动程序s3c2440_ts.ko，此时会自动创建设备节点/dev/event0
+up-tech:~ #insmod /mnt/nfs/demos/test_QT/s3c2440_ts.ko
+
+配置环境变量:
+up-tech:~ # cd /mnt/nfs/Trolltech/Qt-embedded-4.4.0/
+export QTDIR=$PWD
+export LD_LIBRARY_PATH=$PWD/lib
+export TSLIB_TSDEVICE=/dev/event0
+export TSLIB_PLUGINDIR=$PWD/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_CONFFILE=$PWD/etc/ts.conf
+export POINTERCAL_FILE=$PWD/etc/ts-calib.conf
+export QWS_MOUSE_PROTO=tslib:/dev/event0
+export TSLIB_CALIBFILE=$PWD/etc/ts-calib.conf
+export QT_QWS_FONTDIR=$PWD/lib/fonts
+export LANG=zh_CN
+
+执行触摸屏校准程序(嵌入式实验校内讲义P136)
+
+执行 QT/E 带触摸屏的例子程序(P136)
+
+拷贝缺少文件(P137)
+
+编译项目:
+# /usr/local/Trolltech/Qt-embedded-4.4.0/bin/qmake -project
+# /usr/local/Trolltech/Qt-embedded-4.4.0/bin/qmake
+# make
+# cp project_name /UP-CUP2440/Trolltech/Qt-embedded-4.4.0/
+
+
+
+
+
+
+
