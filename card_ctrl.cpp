@@ -211,12 +211,14 @@ void * quit() {
  *ic卡控制
  */
 
-void * ic_card(void *) {
+static bool isUseCard = false;
+
+void * ic_card(void * args) {
         int i =0;
         uchar card_NO[4] = {0x00,0x00,0x00,0x00};
 
-        while(1){
-            while(1){
+        while(isUseCard){
+            while(isUseCard){
                 if((Card_Request() < 0)) {
                     printf("no card request!!!");
                     continue;
@@ -233,7 +235,8 @@ void * ic_card(void *) {
             }
             printf("\n");
 
-            MainWindow::ic_card_state = true;
+            //MainWindow::ic_card_state = true;
+            MainWindow::ic_card_state = !(MainWindow::ic_card_state);
 
             sleep(2);       //防止过度刷卡
         }
@@ -242,6 +245,7 @@ void * ic_card(void *) {
 }
 
 int startCard() {
+    isUseCard = true;
     int result = tty_init();
     if (result < 0) {
         printf("int startCard()  card init fail!!!\n");
@@ -249,7 +253,7 @@ int startCard() {
     }
 
     //开启线程
-    pthread_t tid = MainWindow::cardThread;
+    pthread_t tid;
     if (pthread_create(&tid, NULL, ic_card, NULL) < 0) {
         printf("card thread create fail!!!\n");
         return -1;
@@ -259,6 +263,7 @@ int startCard() {
 }
 
 void exitCard() {
-    pthread_cancel(MainWindow::cardThread);
+    isUseCard = false;
+    //pthread_cancel(MainWindow::cardThread);
     tty_end();
 }

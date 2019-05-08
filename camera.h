@@ -1,0 +1,3 @@
+int openCamera();
+void closeCamera();
+

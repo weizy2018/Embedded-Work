@@ -59,7 +59,7 @@ int tty_init()
     fd = open(COM2, O_RDWR ); //| O_NONBLOCK);//
     if (fd <0) {
         perror(COM2);
-        printf("int tty_init() *******************tty init fail**********************");
+        printf("int tty_init() *******************tty init fail**********************\n");
         return -1;
     }
 

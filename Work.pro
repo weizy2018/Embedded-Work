@@ -28,13 +28,23 @@ SOURCES += \
         mainwindow.cpp \
     ledlight.cpp \
     tty.cpp \
-    card_ctrl.cpp
+    card_ctrl.cpp \
+    struct-dump.c \
+    struct-v4l.c \
+    drv-v4l.c \
+    grab-ng.c \
+    camera.c
 
 HEADERS += \
         mainwindow.h \
     ledlight.h \
     tty.h \
-    card_ctrl.h
+    card_ctrl.h \
+    grab-ng.h \
+    struct-dump.h \
+    struct-v4l.h \
+    fb.h \
+    camera.h
 
 FORMS += \
         mainwindow.ui

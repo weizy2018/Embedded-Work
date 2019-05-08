@@ -50,10 +50,13 @@ private:
     bool closeLedTime;
     bool fixed;
     bool direction;     //false: 东西  true: 南北
+
     bool useCamera;
 
+    bool isAdministrator;
+
 public:
-    static pthread_t cardThread;
+    //static pthread_t cardThread;
     static bool ic_card_state;
 
 private:

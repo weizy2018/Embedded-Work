@@ -2,18 +2,21 @@
 #include "ui_mainwindow.h"
 
 #include "card_ctrl.h"
+extern "C" {
+#include "camera.h"
+}
+
 
 #include <QTime>
 #include <QTimer>
 
-pthread_t MainWindow::cardThread = 0;
+//pthread_t MainWindow::cardThread = 0;
 bool MainWindow::ic_card_state = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //ui->fixEWButton->setStyleSheet("background-color:rgb(255, 0, 0)");
 
     ui->setupUi(this);
 
@@ -24,8 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ledCurtime = 31;
     closeLedTime = false;
     fixed = false;
+
     useCamera = false;
+
     direction = false;
+    isAdministrator = false;
 
     led = new LedLight();
 
@@ -33,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     startCard();
 
     if (!ic_card_state) {
-        disableButtons();
+        //disableButtons();
     }
 
     QTimer * timer = new QTimer(this);
@@ -50,6 +56,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerUpdate()
 {
+    //第一次刷卡，管理员进入，开启按钮
+    //再次刷卡，关闭按钮
+    if (ic_card_state && !isAdministrator) {
+        isAdministrator = true;
+        enableButtons();
+    } else if (!ic_card_state && isAdministrator) {
+        isAdministrator = false;
+        disableButtons();
+    }
+
     //显示系统时间
     QTime time = QTime::currentTime();
     QString curtime = time.toString("hh:mm");
@@ -67,7 +83,6 @@ void MainWindow::timerUpdate()
                 //南北
                 led->vertical();
                 ui->label_2->setText(QString::fromUtf8("当前车向: 南北"));
-                enableButtons();
             } else {
                 //东西
                 led->horizotal();
@@ -170,12 +185,17 @@ void MainWindow::on_cameraButton_clicked()
     if (!this->useCamera) {
         this->useCamera = true;
         qDebug("opening camera...");
+        if (openCamera() < 0) {
+            printf("can't open camera!!!\n");
+            this->useCamera = false;
+        } else {
+            ui->cameraButton->setText(QString::fromUtf8("关闭摄像头"));
+        }
 
-        ui->cameraButton->setText(QString::fromUtf8("关闭摄像头"));
     } else {
         this->useCamera = false;
         qDebug("closing camera...");
-
+        closeCamera();
         ui->cameraButton->setText(QString::fromUtf8("打开摄像头"));
     }
 }
