@@ -214,6 +214,7 @@ void * quit() {
 static bool isUseCard = false;
 
 void * ic_card(void * args) {
+        printf("ic_card()\n");
         int i =0;
         uchar card_NO[4] = {0x00,0x00,0x00,0x00};
 
@@ -240,6 +241,7 @@ void * ic_card(void * args) {
 
             sleep(2);       //防止过度刷卡
         }
+        printf("end ic_card()\n");
 
         return NULL;
 }

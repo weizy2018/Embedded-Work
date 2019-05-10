@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>关闭倒计时</string>
+     <string>close timer</string>
     </property>
    </widget>
    <widget class="QPushButton" name="cameraButton">
@@ -32,12 +32,12 @@
      <rect>
       <x>20</x>
       <y>180</y>
-      <width>89</width>
+      <width>91</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>打开摄像头</string>
+     <string>close  camera</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="lcdNumber">
@@ -70,7 +70,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>当前车向: 东西</string>
+     <string>current dir: EW</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -83,7 +83,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>固定流向</string>
+     <string>fixed direction</string>
     </property>
     <widget class="QRadioButton" name="radioButtonEW">
      <property name="geometry">
@@ -95,7 +95,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>东西</string>
+      <string>EW</string>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButtonSN">
@@ -108,7 +108,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>南北</string>
+      <string>SN</string>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButtonCEL">
@@ -121,7 +121,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>取消</string>
+      <string>CAL</string>
      </property>
     </widget>
    </widget>
@@ -135,7 +135,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>倒计时时长</string>
+     <string>timer</string>
     </property>
     <widget class="QRadioButton" name="radioButton">
      <property name="geometry">

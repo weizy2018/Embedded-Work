@@ -82,11 +82,11 @@ void MainWindow::timerUpdate()
             if (this->direction) {
                 //南北
                 led->vertical();
-                ui->label_2->setText(QString::fromUtf8("当前车向: 南北"));
+                ui->label_2->setText(QString::fromUtf8("current dir:SN"));
             } else {
                 //东西
                 led->horizotal();
-                ui->label_2->setText(QString::fromUtf8("当前车向: 东西"));
+                ui->label_2->setText(QString::fromUtf8("current dir:EW"));
             }
             this->direction = !(this->direction);
 
@@ -141,11 +141,11 @@ void MainWindow::on_closeTimeButton_clicked()
     if (!this->fixed) {
         if (!this->closeLedTime) {
             this->closeLedTime = true;
-            ui->closeTimeButton->setText(QString::fromUtf8("打开倒计时"));
+            ui->closeTimeButton->setText(QString::fromUtf8("open timer"));
 
         } else {
             this->closeLedTime = false;
-            ui->closeTimeButton->setText(QString::fromUtf8("关闭倒计时"));
+            ui->closeTimeButton->setText(QString::fromUtf8("close timer"));
         }
     }
 
@@ -157,7 +157,8 @@ void MainWindow::on_radioButtonEW_clicked()
     this->closeLedTime = true;
     this->fixed = true;
     this->direction = false;
-    ui->label_2->setText(QString::fromUtf8("当前车向: 东西(固定)"));
+    led->horizotal();
+    ui->label_2->setText(QString::fromUtf8("currrent dir:EW(fixed)"));
 }
 
 void MainWindow::on_radioButtonSN_clicked()
@@ -165,7 +166,8 @@ void MainWindow::on_radioButtonSN_clicked()
     this->closeLedTime = true;
     this->fixed = true;
     this->direction = true;
-    ui->label_2->setText(QString::fromUtf8("当前车向: 南北(固定)"));
+    led->vertical();
+    ui->label_2->setText(QString::fromUtf8("current dir:SN(fixed)"));
 }
 
 void MainWindow::on_radioButtonCEL_clicked()
@@ -173,9 +175,9 @@ void MainWindow::on_radioButtonCEL_clicked()
     this->closeLedTime = false;
     this->fixed = false;
     if (this->direction) {
-        ui->label_2->setText(QString::fromUtf8("当前车向: 南北"));
+        ui->label_2->setText(QString::fromUtf8("current dir:SN"));
     } else {
-        ui->label_2->setText(QString::fromUtf8("当前车向: 东西"));
+        ui->label_2->setText(QString::fromUtf8("current dir:EW"));
     }
 
 }
@@ -189,14 +191,14 @@ void MainWindow::on_cameraButton_clicked()
             printf("can't open camera!!!\n");
             this->useCamera = false;
         } else {
-            ui->cameraButton->setText(QString::fromUtf8("关闭摄像头"));
+            ui->cameraButton->setText(QString::fromUtf8("close camera"));
         }
 
     } else {
         this->useCamera = false;
         qDebug("closing camera...");
         closeCamera();
-        ui->cameraButton->setText(QString::fromUtf8("打开摄像头"));
+        ui->cameraButton->setText(QString::fromUtf8("open camera"));
     }
 }
 
